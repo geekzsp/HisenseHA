@@ -152,6 +152,7 @@ class HiSenseApi:
                                          headers=self.refresh_headers,
                                          data=refresh_data) as response:
                 result = await response.json()
+                _LOGGER.debug(f"Get access token: {result}")
                 self.access_token = result[0]["token"]
                 _LOGGER.debug(f"Get access token: {self.access_token}")
                 return True

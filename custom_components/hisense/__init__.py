@@ -20,6 +20,7 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: config_entries.Conf
         refresh_token=entry.data["token"],
         session=session
     )
+    entry.add_update_listener(async_reload_entry)
     # Forward the setup to the climate platform
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, "climate"))
@@ -28,8 +29,9 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: config_entries.Conf
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, "button"))
     return True
-
-
+async def async_reload_entry(hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry) -> None:
+    await async_unload_entry(hass, config_entry)
+    await async_setup_entry(hass, config_entry)
 async def async_unload_entry(hass: core.HomeAssistant, entry: config_entries.ConfigEntry):
     # Unload both climate and switch config entries
     unload_climate = await hass.config_entries.async_forward_entry_unload(entry, "climate")
