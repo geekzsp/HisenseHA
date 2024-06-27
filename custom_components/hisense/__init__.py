@@ -20,8 +20,8 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: config_entries.Conf
         refresh_token=entry.data["token"],
         session=session
     )
-    if not entry.update_listeners:
-        entry.add_update_listener(async_update_options)
+    # if not entry.update_listeners:
+    #     entry.add_update_listener(async_update_options)
 
     # Forward the setup to the climate platform
     hass.async_create_task(
