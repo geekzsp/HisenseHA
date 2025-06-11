@@ -226,12 +226,15 @@ class HiSenseAC:
         self.status["aux_heat"] = result_list[45] == 1
         self.status["nature_wind"] = result_list[44] == 1
         self.status["swing_mode_id"] = result_list[209]
+        # TODO  需要找到防直吹对应的index
+        self.status["prevent_direct_wind"] = result_list[45] == 1
 
     async def turn_on(self):
         command_data = deepcopy(self.power_data_template)
         command_data["attributes"] = "{\"onAndOff\":\"On\"}"
         self.status["power_on"] = True
         await self._robust_send_command(self.power_url, command_data)
+        _LOGGER.info("空调已开机")
 
     async def turn_off(self):
         command_data = deepcopy(self.power_data_template)

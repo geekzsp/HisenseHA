@@ -13,6 +13,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     async_add_entities(entities, True)
     entities = [AuxHeatSwitch(api[device_id]) for device_id in api]
     async_add_entities(entities, True)
+    entities = [PreventDirectWindSwitch(api[device_id]) for device_id in api]
+    async_add_entities(entities, True)
 
 
 class AcScreenSwitch(SwitchEntity):
@@ -95,3 +97,42 @@ class AuxHeatSwitch(SwitchEntity):
     async def async_update(self):
         status = self._api.get_status()
         self._is_on = status.get("aux_heat", False)
+
+
+class PreventDirectWindSwitch(SwitchEntity):
+    """海信空调防直吹开关"""
+
+    def __init__(self, api, entry_id):
+        self._api = api
+        self._entry_id = entry_id
+        self._is_on = False
+        self._attr_unique_id = f"{entry_id}_prevent_direct_wind"
+        self._attr_name = "防直吹模式"
+        self._attr_icon = "mdi:weather-windy"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._entry_id)},
+            "name": "海信空调",
+            "manufacturer": "Hisense",
+        }
+
+    async def async_turn_on(self):
+        await self._api.send_logic_command(28, 1)
+        self._is_on = True
+        await self.async_update()
+        self.async_schedule_update_ha_state(True)
+
+    async def async_turn_off(self):
+        await self._api.send_logic_command(28, 0)
+        self._is_on = False
+        await self.async_update()
+        self.async_schedule_update_ha_state(True)
+
+    async def async_update(self):
+        status = self._api.get_status()
+        self._is_on = status.get("prevent_direct_wind", False)
+
+
+
