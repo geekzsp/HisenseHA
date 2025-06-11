@@ -100,6 +100,7 @@ class HisenseACClimate(ClimateEntity):
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, self._api.wifi_id[-12:])},
+            "connections": {("mac", self._api.mac)},
             "name": "Hisense AC",
             "manufacturer": "Hisense",
         }

@@ -117,6 +117,8 @@ class HiSenseLogin:
 class HiSenseAC:
     def __init__(self, wifi_id, device_id, refresh_token, session):
         self.wifi_id = wifi_id
+        mac_string=wifi_id[-12:]
+        self.mac=':'.join(mac_string[i:i+2] for i in range(0, len(mac_string), 2))
         self.device_id = device_id
         self.refresh_token = refresh_token
         self.access_token = None
