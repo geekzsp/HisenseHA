@@ -32,7 +32,7 @@ class HisenseACUpdateButton(ButtonEntity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._api.device_id)},
+            "identifiers": {(DOMAIN, self._api.wifi_id[-12:])},
             "name": "Hisense AC",
             "manufacturer": "Hisense",
         }
@@ -63,7 +63,7 @@ class HisenseACRefreshTokenButton(ButtonEntity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._api.device_id)},
+            "identifiers": {(DOMAIN, self._api.wifi_id[-12:])},
             "name": "Hisense AC",
             "manufacturer": "Hisense",
         }

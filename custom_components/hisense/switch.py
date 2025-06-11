@@ -27,7 +27,7 @@ class AcScreenSwitch(SwitchEntity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._api.device_id)},
+            "identifiers": {(DOMAIN, self._api.wifi_id[-12:])},
             "name": "Hisense AC",
             "manufacturer": "Hisense",
         }
@@ -69,7 +69,7 @@ class AuxHeatSwitch(SwitchEntity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._api.device_id)},
+            "identifiers": {(DOMAIN, self._api.wifi_id[-12:])},
             "name": "Hisense AC",
             "manufacturer": "Hisense",
         }
@@ -109,14 +109,14 @@ class PreventDirectWindSwitch(SwitchEntity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._api.device_id)},
+            "identifiers": {(DOMAIN, self._api.wifi_id[-12:])},
             "name": "Hisense AC",
             "manufacturer": "Hisense",
         }
 
     @property
     def name(self):
-        return "Aux Heat"
+        return "防直吹模式"
 
     @property
     def is_on(self):

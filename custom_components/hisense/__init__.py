@@ -21,12 +21,18 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: config_entries.Conf
             session=session
         )
 
-        for platform in ("climate", "switch", "button"):
-            hass.async_create_task(
-                hass.config_entries.async_forward_entry_setup(entry, platform)
-            )
+    # 收集所有平台设置任务
+    setup_tasks = []
+    for platform in ("climate", "switch", "button"):
+        setup_tasks.append(
+            hass.config_entries.async_forward_entry_setup(entry, platform)
+        )
+    
+    # 等待所有任务完成
+    await asyncio.gather(*setup_tasks)
 
     return True
+
 
 async def async_unload_entry(hass: core.HomeAssistant, entry: config_entries.ConfigEntry):
     # 收集所有平台的卸载结果
