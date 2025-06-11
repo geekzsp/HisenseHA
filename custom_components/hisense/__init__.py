@@ -2,7 +2,7 @@ from homeassistant import config_entries, core
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import DOMAIN
 from .pyhisenseapi import HiSenseAC
-
+import asyncio
 
 async def async_setup_entry(hass: core.HomeAssistant, entry: config_entries.ConfigEntry):
     hass.data.setdefault(DOMAIN, {})
