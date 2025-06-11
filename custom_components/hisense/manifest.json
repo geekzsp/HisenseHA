@@ -2,7 +2,7 @@
   "domain": "hisense",
   "name": "Hisense Smart Devices",
   "config_flow": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "integration_type": "device",
   "documentation": "https://github.com/geekzsp/HisenseHA",
   "requirements": ["asyncio"],

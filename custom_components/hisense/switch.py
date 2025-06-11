@@ -100,23 +100,27 @@ class AuxHeatSwitch(SwitchEntity):
 
 
 class PreventDirectWindSwitch(SwitchEntity):
-    """海信空调防直吹开关"""
-
-    def __init__(self, api, entry_id):
+    def __init__(self, api):
         self._api = api
-        self._entry_id = entry_id
+        self._attr_unique_id = f"{api.device_id}_prevent_direct_wind"
         self._is_on = False
-        self._attr_unique_id = f"{entry_id}_prevent_direct_wind"
-        self._attr_name = "防直吹模式"
         self._attr_icon = "mdi:weather-windy"
 
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._entry_id)},
-            "name": "海信空调",
+            "identifiers": {(DOMAIN, self._api.device_id)},
+            "name": "Hisense AC",
             "manufacturer": "Hisense",
         }
+
+    @property
+    def name(self):
+        return "Aux Heat"
+
+    @property
+    def is_on(self):
+        return self._is_on
 
     async def async_turn_on(self):
         await self._api.send_logic_command(28, 1)
@@ -133,6 +137,3 @@ class PreventDirectWindSwitch(SwitchEntity):
     async def async_update(self):
         status = self._api.get_status()
         self._is_on = status.get("prevent_direct_wind", False)
-
-
-

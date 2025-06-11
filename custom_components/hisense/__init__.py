@@ -29,7 +29,12 @@ async def async_setup_entry(hass: core.HomeAssistant, entry: config_entries.Conf
     return True
 
 async def async_unload_entry(hass: core.HomeAssistant, entry: config_entries.ConfigEntry):
-    return all(
+    # 收集所有平台的卸载结果
+    unload_results = [
         await hass.config_entries.async_forward_entry_unload(entry, platform)
         for platform in ("climate", "switch", "button")
-    )
+    ]
+    
+    # 检查所有结果是否为True
+    return all(unload_results)
+
