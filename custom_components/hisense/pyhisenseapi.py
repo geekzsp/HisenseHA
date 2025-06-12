@@ -228,8 +228,7 @@ class HiSenseAC:
         self.status["aux_heat"] = result_list[45] == 1
         self.status["nature_wind"] = result_list[44] == 1
         self.status["swing_mode_id"] = result_list[209]
-        # TODO  需要找到防直吹对应的index
-        self.status["prevent_direct_wind"] = result_list[45] == 1
+        self.status["prevent_direct_wind"] = result_list[204] == 1
 
     async def turn_on(self):
         command_data = deepcopy(self.power_data_template)

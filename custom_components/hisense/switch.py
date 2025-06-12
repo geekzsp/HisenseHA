@@ -126,13 +126,13 @@ class PreventDirectWindSwitch(SwitchEntity):
         return self._is_on
 
     async def async_turn_on(self):
-        await self._api.send_logic_command(28, 1)
+        await self._api.send_logic_command(58, 1)
         self._is_on = True
         await self.async_update()
         self.async_schedule_update_ha_state(True)
 
     async def async_turn_off(self):
-        await self._api.send_logic_command(28, 0)
+        await self._api.send_logic_command(58, 0)
         self._is_on = False
         await self.async_update()
         self.async_schedule_update_ha_state(True)
