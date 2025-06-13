@@ -43,10 +43,34 @@ class HisenseACUpdateButton(ButtonEntity):
         return "Force Update"
 
     async def async_press(self):
-        """Handle the button press."""
+        """Handle the button press and notify all device entities to update."""
         _LOGGER.debug(f"Button pressed for entity: {self._attr_unique_id}")
         await self._api.check_status()
-        self.async_schedule_update_ha_state(True)
+        
+        _LOGGER.debug("Starting device entities update process")
+        # Notify all entities of the same device to update
+        device_registry = await self.hass.helpers.device_registry.async_get_registry()
+        entity_registry = await self.hass.helpers.entity_registry.async_get_registry()
+        _LOGGER.debug("Successfully retrieved device and entity registries")
+        
+        # Get device ID from current entity's device info
+        device_id = next(iter(self.device_info["identifiers"]))
+        _LOGGER.debug(f"Identified device ID: {device_id}")
+        device_entry = device_registry.async_get_device({device_id}, {})
+        
+        # Update all entities belonging to this device
+        entity_count = 0
+        for entity_entry in entity_registry.entities.values():
+            if entity_entry.device_id == device_entry.id:
+                entity = self.hass.states.get(entity_entry.entity_id)
+                if entity:
+                    _LOGGER.debug(f"Updating entity: {entity_entry.entity_id}")
+                    # Update entity data from device (will automatically trigger state update)
+                    entity.async_schedule_update_ha_state(force_refresh=True)
+                    entity_count += 1
+        _LOGGER.debug(f"Update process completed. Total entities updated: {entity_count}")
+        
+
 
 
 class HisenseACRefreshTokenButton(ButtonEntity):

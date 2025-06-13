@@ -106,6 +106,7 @@ class HisenseACClimate(ClimateEntity):
         }
 
     async def async_update(self):
+        _LOGGER.debug(f"async_update {self._attr_unique_id}: {status}")
         status = self._api.get_status()
         self._attr_is_on = status.get("power_on")
         self._attr_current_temperature = status.get("indoor_temperature")
@@ -119,6 +120,7 @@ class HisenseACClimate(ClimateEntity):
             "fan_mode_id", 0)]
         self._attr_swing_mode = self._swing_mode_lookup[status.get(
             "swing_mode_id", 0)]
+        _LOGGER.debug(f"Completed climate entity update for {self._attr_unique_id}. New state: {self._attr_hvac_mode}, Temperature: {self._attr_current_temperature}")
 
     async def async_set_temperature(self, **kwargs):
         """Set new target temperature."""
@@ -160,9 +162,9 @@ class HisenseACClimate(ClimateEntity):
             # Update the entity's current swing mode
             self._attr_swing_mode = swing_mode
             # Notify Home Assistant that the entity's state has changed
-            self.async_schedule_update_ha_state(True)
         else:
             _LOGGER.error("Unsupported swing mode: %s", swing_mode)
+        await self.async_update()
 
     async def async_set_hvac_mode(self, hvac_mode):
         """Set new target HVAC mode."""
