@@ -106,7 +106,7 @@ class HisenseACClimate(ClimateEntity):
         }
 
     async def async_update(self):
-        _LOGGER.debug(f"async_update {self._attr_unique_id}: {status}")
+        _LOGGER.debug(f"Starting async_update for {self._attr_unique_id}")
         status = self._api.get_status()
         self._attr_is_on = status.get("power_on")
         self._attr_current_temperature = status.get("indoor_temperature")
