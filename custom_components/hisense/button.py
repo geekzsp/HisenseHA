@@ -51,8 +51,8 @@ class HisenseACUpdateButton(ButtonEntity):
         
         _LOGGER.debug("Starting device entities update process")
         # Notify all entities of the same device to update
-        device_registry = await dr.async_get_registry(self.hass)
-        entity_registry = await er.async_get_registry(self.hass)
+        device_registry = await dr.async_get(self.hass)
+        entity_registry = await er.async_get(self.hass)
         _LOGGER.debug("Successfully retrieved device and entity registries")
         
         # Get device ID from current entity's device info
