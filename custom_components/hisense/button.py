@@ -4,6 +4,8 @@ from homeassistant.core import HomeAssistant
 from .const import DOMAIN
 from homeassistant.const import EntityCategory
 import logging
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -49,8 +51,8 @@ class HisenseACUpdateButton(ButtonEntity):
         
         _LOGGER.debug("Starting device entities update process")
         # Notify all entities of the same device to update
-        device_registry = await self.hass.helpers.device_registry.async_get_registry()
-        entity_registry = await self.hass.helpers.entity_registry.async_get_registry()
+        device_registry = await dr.async_get_registry(self.hass)
+        entity_registry = await er.async_get_registry(self.hass)
         _LOGGER.debug("Successfully retrieved device and entity registries")
         
         # Get device ID from current entity's device info
